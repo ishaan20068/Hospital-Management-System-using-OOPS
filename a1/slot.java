@@ -14,3 +14,4 @@ public class slot{
   public vaccine getvaccinename(){return this.vaccinename;}
   
 }
+
