@@ -24,4 +24,11 @@ public class vaccine {
   }
   public String getname(){
     return name;
-  }}
+  }
+  public int getnumdoses(){
+    return numdoses;
+  }
+  public int getgap(){
+    return gap;
+  }
+}
