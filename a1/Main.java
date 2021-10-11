@@ -4,7 +4,6 @@ public class Main {
   public static HashMap<String,citizen> citizenlist=new HashMap<>();
   public static HashMap<String,vaccine> vaccinespecs=new HashMap<>();
   public static HashMap<Integer,hospital> hospitallist=new HashMap<>();
-  public static HashMap<hospital,ArrayList<slot>> hospitalslots=new HashMap<>();
   public static ArrayList<String> vaccinelist=new ArrayList<>();
   public static void main(String[] args){
     Scanner sc=new Scanner(System.in);
@@ -90,7 +89,55 @@ public class Main {
         System.out.println("---------------------------------\n{Menu Options}");
       }
       else if(choice==5){
-        
+        System.out.print("Enter patient unique ID: ");
+        String uid=scs.nextLine();
+        citizen patient=citizenlist.get(uid);
+        if((patient.vaccinationstatus).equals("FULLY VACCINATED")){
+          System.out.println("You are already fully vaccinated and overdose can cause unnecessary damage!!!");
+          continue;
+        }
+        System.out.print("1. Search by area\n2. Search by Vaccine\nEnter option: ");
+        int option =sc.nextInt();
+        if(option==1){
+          System.out.print("Enter pincode: ");
+          int pincode1=sc.nextInt();
+          Set<Integer> ids=hospitallist.keySet();
+          for(int id:ids){
+            hospital htemp1=hospitallist.get(id);
+            if(htemp1.gethospitalpincode()==pincode1){
+              System.out.println(htemp1.gethospitalid()+htemp1.gethospitalname());
+            }
+          }
+          System.out.print("Enter hospital ID: ");
+          int hidtemp1=sc.nextInt();
+          hospital htemp2=hospitallist.get(hidtemp1);
+          ArrayList<slot> slots1=htemp2.slotlist;
+          for(int i=0;i<slots1.size();i++){
+            slot slottemp=slots1.get(i);
+            System.out.println(i+"-> Day:"+slottemp.getday()+", Available Qty:"+slottemp.getquantity()+", Vaccine:"+slottemp.getvaccinename());
+          }
+          System.out.print("Choose slot: ");
+          int chooseslot=sc.nextInt();
+          if((patient.vaccinationstatus).equals("PARTIALLY VACCINATED")){
+            if(slots1.get(chooseslot).day<patient.vaccineday){
+              System.out.println("You cannot choose a slot before the due date!!!\nTry booking again from the main menu");
+              continue;}}
+          System.out.println(patient.name+" vaccinated with "+(slots1.get(chooseslot)).vaccinename);
+          (slots1.get(chooseslot)).quantity--;
+          patient.vaccineadm=(slots1.get(chooseslot)).vaccinename;
+          patient.dosesleft--;
+          patient.vaccinationstatus="PARTIALLY VACCINATED";
+          if(patient.dosesleft==0){patient.vaccinationstatus="FULLY VACCINATED";}
+          if(patient.vaccinationstatus=="PARTIALLY VACCINATED"){patient.vaccineday=(slots1.get(chooseslot)).day+patient.vaccineadm.getgap();}
+          if((slots1.get(chooseslot)).quantity==0){
+            slots1.remove(chooseslot);
+          }
+          
+        }
+        if(option==2){
+          
+        }
+        System.out.println("---------------------------------\n{Menu Options}");
       }
       else if(choice==6){
         System.out.print("Enter Hospital ID: ");
@@ -110,7 +157,17 @@ public class Main {
           citizen x=citizenlist.get(patientid);
           String vaccination=x.getstatus();
           if(vaccination.equals("REGISTERED")){System.out.println("Citizen REGISTERED");}
-          
+          else if(vaccination.equals("FULLY VACCINATED")){
+            System.out.println("FULLY VACCINATED");
+            System.out.println("Vaccine given: "+(x.vaccineadm).name);
+            System.out.println("Number of doses given: "+(x.vaccineadm).numdoses);
+          }
+          else{
+            System.out.println("PARTIALLY VACCINATED");
+            System.out.println("Vaccine given: "+(x.vaccineadm).name);
+            System.out.println("Number of doses given: "+((x.vaccineadm).numdoses-x.dosesleft));
+            System.out.println("Next dose due date: "+x.vaccineday);
+          }
         }
         else{System.out.println("patient id is invalid!!!");}
         System.out.println("---------------------------------\n{Menu Options}");
