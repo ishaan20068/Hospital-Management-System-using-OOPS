@@ -51,6 +51,9 @@ public class Main {
         age=sc.nextInt();
         System.out.print("Unique ID: ");
         uid=scs.nextLine();
+        if(citizenlist.containsKey(uid)){
+          System.out.println("User ID is already present, enter a unique user ID");
+        }
         if(age<18){
           System.out.println("Citizen Name: "+cname+", Age: "+age+", Unique ID: "+uid+"\nOnly above 18 are allowed");
         }
@@ -80,6 +83,7 @@ public class Main {
           for(int j=0;j<vaccinelist.size();j++){System.out.println(j+". "+vaccinelist.get(j));}
           int vaccinechoice=sc.nextInt();
           vaccine vtemp=vaccinespecs.get(vaccinelist.get(vaccinechoice));
+          (vtemp.presentin).add(hospitallist.get(hid));
           slot stemp=new slot(daynum,quantity,vtemp);
           hospital htemp=hospitallist.get(hid);
           htemp.addslot(stemp);
@@ -110,11 +114,12 @@ public class Main {
           }
           System.out.print("Enter hospital ID: ");
           int hidtemp1=sc.nextInt();
+          if(!hospitallist.containsKey(hidtemp1)){if((hospitallist.get(hidtemp1)).pincode!=pincode1){System.out.println("Wrong ID"); continue;}}
           hospital htemp2=hospitallist.get(hidtemp1);
           ArrayList<slot> slots1=htemp2.slotlist;
           for(int i=0;i<slots1.size();i++){
             slot slottemp=slots1.get(i);
-            System.out.println(i+"-> Day:"+slottemp.getday()+", Available Qty:"+slottemp.getquantity()+", Vaccine:"+slottemp.getvaccinename());
+            System.out.println(i+"-> Day:"+slottemp.getday()+", Available Qty:"+slottemp.getquantity()+", Vaccine:"+(slottemp.getvaccinename()).name);
           }
           System.out.print("Choose slot: ");
           int chooseslot=sc.nextInt();
@@ -122,7 +127,10 @@ public class Main {
             if(slots1.get(chooseslot).day<patient.vaccineday){
               System.out.println("You cannot choose a slot before the due date!!!\nTry booking again from the main menu");
               continue;}}
-          System.out.println(patient.name+" vaccinated with "+(slots1.get(chooseslot)).vaccinename);
+          if((patient.vaccinationstatus).equals("REGISTERED")){
+            patient.dosesleft=((slots1.get(chooseslot)).vaccinename).numdoses;
+          }
+          System.out.println(patient.name+" vaccinated with "+((slots1.get(chooseslot)).vaccinename).name);
           (slots1.get(chooseslot)).quantity--;
           patient.vaccineadm=(slots1.get(chooseslot)).vaccinename;
           patient.dosesleft--;
@@ -130,12 +138,54 @@ public class Main {
           if(patient.dosesleft==0){patient.vaccinationstatus="FULLY VACCINATED";}
           if(patient.vaccinationstatus=="PARTIALLY VACCINATED"){patient.vaccineday=(slots1.get(chooseslot)).day+patient.vaccineadm.getgap();}
           if((slots1.get(chooseslot)).quantity==0){
+            ArrayList<hospital> tempdes=(((slots1.get(chooseslot)).vaccinename).presentin);
+            int i=tempdes.indexOf(htemp2);
+            tempdes.remove(i);
             slots1.remove(chooseslot);
           }
           
         }
         if(option==2){
-          
+          System.out.println("Enter Vaccine Name: ");
+          String vname=scs.nextLine();
+          vaccine vtemp=vaccinespecs.get(vname);
+          ArrayList<hospital> hlist1=vtemp.presentin;
+          for(int i=0;i<hlist1.size();i++){
+            hospital x1=hlist1.get(i);
+            System.out.println(x1.gethospitalid()+" "+x1.gethospitalname());
+          }
+          System.out.print("Enter hospital ID: ");
+          int hid1=sc.nextInt();
+          hospital h1=hospitallist.get(hid1);
+          ArrayList<slot> l1=h1.slotlist;
+          for(int i=0;i<h1.slotlist.size();i++){
+            if((h1.slotlist.get(i)).vaccinename==vtemp){
+              System.out.println(i+"-> Day: "+(h1.slotlist.get(i)).day+", Available Qty: "+(h1.slotlist.get(i)).getquantity()+", vaccine: "+ (h1.slotlist.get(i)).getvaccinename());
+            }
+          }
+          System.out.print("Choose slot: ");
+          int slotchoice=sc.nextInt();
+          slot chosenslot=h1.slotlist.get(slotchoice);
+          if((patient.vaccinationstatus).equals("PARTIALLY VACCINATED")){
+            if(chosenslot.day<patient.vaccineday){
+              System.out.println("You cannot choose a slot before the due date!!!\nTry booking again from the main menu");
+              continue;}}
+           if((patient.vaccinationstatus).equals("REGISTERED")){
+            patient.dosesleft=(chosenslot.vaccinename).numdoses;
+          }
+          System.out.println(patient.name+" vaccinated with "+(chosenslot.vaccinename).name);
+          (chosenslot).quantity--;
+          patient.vaccineadm=(chosenslot).vaccinename;
+          patient.dosesleft--;
+          patient.vaccinationstatus="PARTIALLY VACCINATED";
+          if(patient.dosesleft==0){patient.vaccinationstatus="FULLY VACCINATED";}
+          if(patient.vaccinationstatus=="PARTIALLY VACCINATED"){patient.vaccineday=(chosenslot).day+patient.vaccineadm.getgap();}
+          if(chosenslot.quantity==0){
+            ArrayList<hospital> tempdes=((chosenslot).vaccinename).presentin;
+            int i=tempdes.indexOf(h1);
+            tempdes.remove(i);
+            (h1.slotlist).remove(chosenslot);
+          }
         }
         System.out.println("---------------------------------\n{Menu Options}");
       }
