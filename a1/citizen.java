@@ -6,7 +6,7 @@ public class citizen {
   public String userid;
   public String vaccinationstatus;
   public vaccine vaccineadm;
-  public int dosesleft=vaccineadm.numdoses;
+  public int dosesleft=0;
   public int vaccineday;
   public citizen(String name,int age,String userid){
     this.name=name;
