@@ -11,6 +11,7 @@ public class assignment implements assessment{
     public assignment(String question1,int marks){
         this.question=question1;
         this.max_marks=marks;
+        this.grader=new HashMap<>();
         this.closed=false;
         this.type="Assignment";
         this.submissions=new HashMap<>();
@@ -23,8 +24,8 @@ public class assignment implements assessment{
     }
     @Override
     public boolean isgraded(student s1){
-        if(this.closed==true){return true;}
-        else if(this.grade.get(s1)!=-1){return true;}
+
+        if(this.grade.get(s1)!=-1){return true;}
         else{return false;}
     }
     @Override
@@ -61,7 +62,8 @@ public class assignment implements assessment{
     }
     @Override
     public void submit(student s1,String x1){
-        if(x1.length()<5){return;}
+        if(x1.length()<5){
+            System.out.println("invalid file!!!");return;}
         else if(x1.substring(x1.length() - 4).equals(".zip")){
         this.submissions.put(s1,x1);}
         else{System.out.println("Invalid file type!!! the records were not updated!!!");}

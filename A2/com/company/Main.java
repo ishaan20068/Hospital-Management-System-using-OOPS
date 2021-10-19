@@ -32,7 +32,7 @@ public class Main{
                 int choice1=0;
                 while(choice1!=9){
                     System.out.println("Welcome "+prof.get_name());
-                    System.out.println("INSTRUCTOR MENU\n1. Add class material\n2. Add assessments\n3. View lecture materials\n4. View assessments\n5. Grade assessments6\n. Close assessment\n7. View comments\n8. Add comments\n9. Logout");
+                    System.out.println("INSTRUCTOR MENU\n1. Add class material\n2. Add assessments\n3. View lecture materials\n4. View assessments\n5. Grade assessments\n6. Close assessment\n7. View comments\n8. Add comments\n9. Logout");
                     System.out.print("your choice: ");
                     choice1=sc.nextInt();
                     if(choice1==1){
@@ -128,16 +128,20 @@ public class Main{
                         int c=0;
                         HashMap<Integer,student> templist2=new HashMap<>();
                         for (int i=0;i< studentlist.size();i++){
-                            if(!ass1.isgraded(studentlist.get(i))){
+                            if(!ass1.isgraded(studentlist.get(i))&&!ass1.ispending(studentlist.get(i))){
                                 System.out.println(c+" : "+studentlist.get(i).get_name());
                                 templist2.put(c, studentlist.get(i));
                                 c++;
                             }
                         }
+                        if(templist2.isEmpty()){
+                            System.out.println("no one has submitted yet!!!");
+                            continue;
+                        }
                         System.out.print("choose student id to grade: ");
                         int id11=sc.nextInt();
                         student stemp=templist2.get(id11);
-                        System.out.print("Submission: "+ass1.getsubmission(stemp)+"\n---------------\nMax marks: "+ass1.getMax_marks());
+                        System.out.println("Submission: "+ass1.getsubmission(stemp)+"\n---------------\nMax marks: "+ass1.getMax_marks());
                         System.out.print("Marks scored : ");
                         int mark=sc.nextInt();
                         ass1.setmarks(stemp,mark);
@@ -260,7 +264,7 @@ public class Main{
                         if(submitted.size()==0){System.out.println("Graded submissions\n\nUngraded submissions");continue;}
                         for(int i=0;i<submitted.size();i++){
                             assessment temp1=submitted.get(i);
-                            if(!temp1.isgraded(child)){
+                            if(temp1.isgraded(child)){
                                 graded.add(temp1);
                             }
                             else{ungraded.add(temp1);}
@@ -271,7 +275,7 @@ public class Main{
                             System.out.println("submission: "+temp1.getsubmission(child)+"\nscore: "+temp1.get_marks(child)+"graded by: "+temp1.getgrader(child).get_name());
                             System.out.println("----------------------------");
                         }
-                        System.out.println("Graded submissions\n");
+                        System.out.println("Ungraded submissions\n");
                         for(int i=0;i<ungraded.size();i++){
                             assessment temp1=ungraded.get(i);
                             System.out.println("submission: "+temp1.getsubmission(child));

@@ -11,6 +11,7 @@ public class quiz implements assessment {
         this.question=question1;
         this.closed=false;
         this.type="Question";
+        this.grader=new HashMap<>();
         this.submissions=new HashMap<>();
         this.grade=new HashMap<>();
         Main.assessmentlist.add(this);
