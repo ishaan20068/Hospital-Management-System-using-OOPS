@@ -7,7 +7,7 @@ public class ladderFloor extends floor{
         this.type=type1;
         if(this.type.equals("normal ladder")){this.setPoints(2);}
         else if(this.type.equals("elevator")){this.setPoints(4);}
-        Main.floorlist.add(this);
+        Main.getlist().add(this);
     }
     public String getType() {
         return type;
