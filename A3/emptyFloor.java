@@ -4,7 +4,7 @@ public class emptyFloor extends floor{
     public emptyFloor(int number){
     this.setPoints(1);
     this.setNumber(number);
-    Main.floorlist.add(this);
+    Main.getlist().add(this);
     }
     @Override
     public void execute(player p){
