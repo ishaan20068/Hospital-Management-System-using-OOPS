@@ -12,7 +12,7 @@ public class player {
     public int getPosition() {return position;}
     public String getName() {return name;}
     public int getScore() {return score;}
-    public floor getFloor(){return Main.floorlist.get(this.position);}
+    public floor getFloor(){return Main.getlist().get(this.position);}
     public  String getType(){
         if(this.getFloor() instanceof emptyFloor){
             return "Empty Floor";
@@ -34,35 +34,35 @@ public class player {
     public void move(dice d){
         d.roll();
         int x=d.getFaceValue();
-        System.out.println(d.toString());
+        System.out.println(d);
         this.position+=x;
         floor currfloor=this.getFloor();
         currfloor.execute(this);
-        System.out.println(this.toString());
+        System.out.println(this);
         if(this.getType().equals("Empty Floor")){return;}
         else if(this.getType().equals("normal snake")){
             this.position-=4;
             currfloor=this.getFloor();
             currfloor.execute(this);
-            System.out.println(this.toString());
+            System.out.println(this);
         }
         else if(this.getType().equals("king cobra")){
             this.position-=8;
             currfloor=this.getFloor();
             currfloor.execute(this);
-            System.out.println(this.toString());
+            System.out.println(this);
         }
         else if(this.getType().equals("elevator")){
             this.position+=8;
             currfloor=this.getFloor();
             currfloor.execute(this);
-            System.out.println(this.toString());
+            System.out.println(this);
         }
         else if(this.getType().equals("normal ladder")){
             this.position+=4;
             currfloor=this.getFloor();
             currfloor.execute(this);
-            System.out.println(this.toString());
+            System.out.println(this);
         }
     }
 }
