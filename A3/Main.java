@@ -1,8 +1,9 @@
 package A3;
 import java.util.*;
 public class Main {
-    public static ArrayList<floor> floorlist=new ArrayList<>();
-    public static HashMap<player,Integer> scorelist=new HashMap<>();
+    private static ArrayList<floor> floorlist=new ArrayList<>();
+    private static HashMap<player,Integer> scorelist=new HashMap<>();
+    public static ArrayList<floor> getlist(){return floorlist;}
     public static void main(String[] args) {
         floor zero=new emptyFloor(0);
         floor one=new emptyFloor(1);
@@ -32,12 +33,12 @@ public class Main {
                 System.out.print("Hit enter to roll the dice!!!");
                 scs.nextLine();
                 d.roll();
-                System.out.println(d.toString());
+                System.out.println(d);
                 if (d.getFaceValue() == 2) {
                     System.out.println("Cannot start until you get 1!!!");
                 } else {
                     p = new player(name);
-                    System.out.println(p.toString());
+                    System.out.println(p);
                     break;
                 }
             }
@@ -51,13 +52,13 @@ public class Main {
                 scs.nextLine();
                 d.roll();
                 int x = d.getFaceValue();
-                System.out.println(d.toString());
+                System.out.println(d);
                 if (x == 2) {
                     System.out.println("player can't move :(");
                 } else {
                     p.addscore(1);
                     p.finallevel();
-                    System.out.println(p.toString());
+                    System.out.println(p);
                     System.out.println("game over!!!\n" + p.getName() + " accumulated " + p.getScore() + " points");
                     System.out.println("---------------------------------------------------------------");
                     scorelist.put(p,p.getScore());
@@ -66,7 +67,6 @@ public class Main {
             }
         }
         System.out.println("the scores are as follows:");
-        ArrayList<player> winners=new ArrayList<>();
         int max=-100000;
         for(player key1:scorelist.keySet()){
             System.out.println(key1.getName()+" - "+scorelist.get(key1));
