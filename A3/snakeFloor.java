@@ -7,7 +7,7 @@ public class snakeFloor extends floor{
         this.type=type1;
         if(this.type.equals("normal snake")){this.setPoints(-2);}
         else if(this.type.equals("king cobra")){this.setPoints(-4);}
-        Main.floorlist.add(this);
+        Main.getlist().add(this);
     }
     public String getType() {
         return type;
